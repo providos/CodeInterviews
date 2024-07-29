@@ -1,0 +1,6 @@
+@homeassignment_HostAddress = http://localhost:5048
+
+GET {{homeassignment_HostAddress}}/homeassignment/
+Accept: application/json
+
+###
