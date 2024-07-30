@@ -7,18 +7,18 @@ function UserDetails() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log('Fetching details for user ID:', id);
+    console.log('UserDetails - Fetching details for user ID:', id);
     fetchUser(id);
   }, [id]);
 
   const fetchUser = async (id) => {
     try {
-      console.log('Making API call to fetch user details...');
+      console.log('UserDetails - Making API call to fetch user details...');
       const response = await axios.get(`https://localhost:7276/user/getUser/${id}`);
-      console.log('API response:', response.data);
+      console.log('UserDetails - API response:', response.data);
       setUser(response.data);
     } catch (error) {
-      console.error("There was an error fetching the user!", error);
+      console.error("UserDetails - There was an error fetching the user!", error);
     }
   };
 
@@ -29,8 +29,8 @@ function UserDetails() {
       <h1>{user.first_name} {user.last_name}</h1>
       <p>Email: {user.email}</p>
       <img src={user.avatar} alt={`${user.first_name} ${user.last_name}`} />
-      <div>
-        <Link to={`/update/${user.id}`}>Edit</Link>
+      <div style={{ textAlign: 'center' }}>
+        <Link to={`/update/${user.id}`}><button>Edit</button></Link>
       </div>
     </div>
   );

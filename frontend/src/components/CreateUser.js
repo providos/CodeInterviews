@@ -10,14 +10,14 @@ function CreateUser() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Submitting new user:', { firstName, lastName, email });
+    console.log('CreateUser - Submitting new user:', { firstName, lastName, email });
     try {
-      console.log('Making API call to create user...');
+      console.log('CreateUser - Making API call to create user...');
       await axios.post('https://localhost:7276/user/createUser', { firstName, lastName, email });
-      console.log('User created successfully');
+      console.log('CreateUser - User created successfully');
       navigate('/');
     } catch (error) {
-      console.error("There was an error creating the user!", error);
+      console.error("CreateUser - There was an error creating the user!", error);
     }
   };
 
@@ -37,7 +37,9 @@ function CreateUser() {
           <label>Email</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <button type="submit">Create</button>
+        <div style={{ textAlign: 'center' }}>
+          <button type="submit">Create</button>
+        </div>
       </form>
     </div>
   );

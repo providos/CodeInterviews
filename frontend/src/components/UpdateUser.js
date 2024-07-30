@@ -12,15 +12,15 @@ function UpdateUser() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('Fetching user details for update, ID:', id);
+    console.log('UpdateUser - Fetching user details for update, ID:', id);
     fetchUser(id);
   }, [id]);
 
   const fetchUser = async (id) => {
     try {
-      console.log('Making API call to fetch user details for update...');
+      console.log('UpdateUser - Making API call to fetch user details for update...');
       const response = await axios.get(`https://localhost:7276/user/getUser/${id}`);
-      console.log('API response:', response.data);
+      console.log('UpdateUser - API response:', response.data);
       const user = response.data;
       setFirstName(user.first_name);
       setLastName(user.last_name);
@@ -28,20 +28,20 @@ function UpdateUser() {
       setName(user.name);
       setJob(user.job);
     } catch (error) {
-      console.error("There was an error fetching the user!", error);
+      console.error("UpdateUser - There was an error fetching the user!", error);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Submitting updated user:', { id, firstName, lastName, email, name, job });
+    console.log('UpdateUser - Submitting updated user:', { id, firstName, lastName, email, name, job });
     try {
-      console.log('Making API call to update user...');
+      console.log('UpdateUser - Making API call to update user...');
       await axios.put(`https://localhost:7276/user/updateUser/${id}`, { firstName, lastName, email, name, job });
-      console.log('User updated successfully');
+      console.log('UpdateUser - User updated successfully');
       navigate(`/user/${id}`);
     } catch (error) {
-      console.error("There was an error updating the user!", error);
+      console.error("UpdateUser - There was an error updating the user!", error);
     }
   };
 
@@ -69,7 +69,9 @@ function UpdateUser() {
           <label>Job</label>
           <input type="text" value={job} onChange={(e) => setJob(e.target.value)} />
         </div>
-        <button type="submit">Update</button>
+        <div style={{ textAlign: 'center' }}>
+          <button type="submit">Update</button>
+        </div>
       </form>
     </div>
   );

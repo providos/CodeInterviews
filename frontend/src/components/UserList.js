@@ -9,17 +9,17 @@ function UserList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('Fetching users for page:', page);
+    console.log('UserList - Fetching users for page:', page);
     fetchUsers(page);
-  }, [page]); // Only re-run the effect if page changes
+  }, [page]);
 
   const fetchUsers = async (page) => {
     setLoading(true);
     setError(null);
     try {
-      console.log('Making API call to fetch users...');
+      console.log('UserList - Making API call to fetch users...');
       const response = await axios.get(`https://localhost:7276/user/getUsers/${page}`);
-      console.log('API response:', response.data);
+      console.log('UserList - API response:', response.data);
       const transformedUsers = response.data.map(user => ({
         id: user.id,
         firstName: user.first_name,
@@ -28,13 +28,13 @@ function UserList() {
         avatar: user.avatar
       }));
       setUsers(transformedUsers);
-      console.log('Transformed users:', transformedUsers);
+      console.log('UserList - Transformed users:', transformedUsers);
     } catch (error) {
-      console.error("There was an error fetching the users!", error);
-      setError("There was an error fetching the users!");
+      console.error("UserList - There was an error fetching the users!", error);
+      setError("UserList - There was an error fetching the users!");
     } finally {
       setLoading(false);
-      console.log('Finished fetching users');
+      console.log('UserList - Finished fetching users');
     }
   };
 
@@ -56,8 +56,10 @@ function UserList() {
           </li>
         ))}
       </ul>
-      <button onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
-      <button onClick={() => setPage(page + 1)}>Next</button>
+      <div style={{ textAlign: 'center' }}>
+        <button onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+        <button onClick={() => setPage(page + 1)}>Next</button>
+      </div>
     </div>
   );
 }
