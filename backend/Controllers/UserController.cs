@@ -1,9 +1,12 @@
 ﻿using homeassignment.DTO;
 using homeassignment.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace homeassignment.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -25,9 +28,23 @@ namespace homeassignment.Controllers
         [HttpGet("getUsers/{page}")]
         public async Task<IActionResult> GetUsers(int page)
         {
-            var users = await _userService.GetUsersAsync(page);
-            return Ok(users);
+            try
+            {
+                var users = await _userService.GetUsersAsync(page);
+                if (users == null || users.Count() == 0)
+                {
+                    return NotFound("No users found.");
+                }
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging library like Serilog or NLog)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error.");
+            }
         }
+
 
         [HttpGet("getUser/{id}")]
         public async Task<IActionResult> GetUser(int id)

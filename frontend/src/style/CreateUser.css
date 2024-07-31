@@ -1,0 +1,45 @@
+.create-user-container {
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .create-user-container h1 {
+    margin-bottom: 20px;
+  }
+  
+  .create-user-container form div {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .create-user-container label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .create-user-container input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .create-user-container button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .create-user-container button:hover {
+    background: #0056b3;
+  }
+  

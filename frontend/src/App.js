@@ -1,33 +1,62 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link, useNavigate } from 'react-router-dom';
+import Login from './components/Login';
 import UserList from './components/UserList';
-import UserDetails from './components/UserDetails';
 import CreateUser from './components/CreateUser';
 import UpdateUser from './components/UpdateUser';
-import './App.css';
+import UserDetails from './components/UserDetails';
+import Welcome from './components/Welcome';
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
   return (
     <Router>
-      <div className="App">
+      <AppContent user={user} setUser={setUser} />
+    </Router>
+  );
+};
+
+const AppContent = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/login');
+  };
+
+  return (
+    <>
+      {user && (
         <header>
           <h1>User Management App</h1>
           <nav>
-            <Link to="/">Home</Link>
-            <Link to="/create">Create User</Link>
+            <Link to="/welcome">Home</Link>
+            <span>Welcome back {user.username}!</span>
+            <button onClick={handleLogout}>Logout</button>
           </nav>
         </header>
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<UserList />} />
-            <Route path="/user/:id" element={<UserDetails />} />
-            <Route path="/create" element={<CreateUser />} />
-            <Route path="/update/:id" element={<UpdateUser />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+      )}
+      <Routes>
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/welcome" element={<Welcome user={user} />} />
+        <Route path="/user-list" element={user ? <UserList /> : <Navigate to="/login" />} />
+        <Route path="/user/:id" element={user ? <UserDetails /> : <Navigate to="/login" />} />
+        <Route path="/create-user" element={user ? <CreateUser /> : <Navigate to="/login" />} />
+        <Route path="/update/:id" element={user ? <UpdateUser /> : <Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </>
   );
-}
+};
 
 export default App;

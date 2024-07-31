@@ -1,0 +1,63 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 10px 20px;
+  color: white;
+}
+
+header nav {
+  display: flex;
+  gap: 10px;
+}
+
+header nav a {
+  color: white;
+  text-decoration: none;
+}
+
+header nav button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+}
+
+.welcome-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.welcome-box h1 {
+  margin-bottom: 20px;
+}
+
+.welcome-box .buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.welcome-box .buttons a {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.welcome-box .buttons a:hover {
+  background-color: #0056b3;
+}

@@ -1,0 +1,40 @@
+.update-user-container {
+  text-align: center;
+    padding: 20px;
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for better separation */
+    max-width: 500px; /* Max width for the container */
+    margin: 60px auto; /* Center the container and add some top margin */
+}
+
+.update-user-form .form-group {
+  margin-bottom: 15px;
+    text-align: left;
+}
+
+.update-user-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.update-user-form input {
+  width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.update-button {
+  width: 100%;
+    padding: 10px;
+    background: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.update-button:hover {
+  background-color: #0056b3;
+}

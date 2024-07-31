@@ -1,14 +1,15 @@
 using homeassignment.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Add CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowedOrigins", builder =>
@@ -16,36 +17,37 @@ builder.Services.AddCors(options =>
         builder.WithOrigins("http://localhost:3000", "https://www.google.com", "https://www.facebook.com")
                .AllowAnyHeader()
                .AllowAnyMethod()
-               .AllowCredentials(); // If you need to support credentials
+               .AllowCredentials();
     });
 });
 
-// Add authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = "yourissuer",
-                        ValidAudience = "youraudience",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key"))
-                    };
-                });
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true
 
-// Add HttpClient and dependency injection for your services
+    };
+});
+
 builder.Services.AddHttpClient<IUserService, UserService>();
 
-// Add Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -53,7 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "User API V1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        c.RoutePrefix = string.Empty;
     });
 }
 
@@ -63,6 +65,35 @@ app.UseCors("AllowedOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (errorFeature != null)
+        {
+            var ex = errorFeature.Error;
+
+            // Ensure ex.Message is not null
+            var errorMessage = ex?.Message ?? "An unexpected error occurred.";
+
+            var errorResponse = new
+            {
+                context.Response.StatusCode,
+                Message = "An unexpected error occurred. Please try again later.",
+                Detailed = errorMessage
+            };
+
+            var errorJson = JsonSerializer.Serialize(errorResponse);
+
+            await context.Response.WriteAsync(errorJson);
+        }
+    });
+});
 
 app.MapControllers();
 

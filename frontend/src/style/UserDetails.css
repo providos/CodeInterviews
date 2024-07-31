@@ -1,0 +1,34 @@
+.user-details-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for better separation */
+    max-width: 500px; /* Max width for the container */
+    margin: 60px auto; /* Center the container and add some top margin */
+  }
+  
+  .user-details img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+  
+  .user-details p {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+
+  .edit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  
